@@ -1,7 +1,11 @@
 package org.example.multigame.shared;
 
+import org.example.multigame.server.ServerGameLogic;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GameState implements Serializable{
     public int localPlayerId;
@@ -9,6 +13,8 @@ public class GameState implements Serializable{
     public int gameTimer;
 
     public ArrayList<ProjectileState> projectileStates = new ArrayList<>();
+
+    public Map<String, ServerGameLogic> activeLobbies;
 
 
     public String test;

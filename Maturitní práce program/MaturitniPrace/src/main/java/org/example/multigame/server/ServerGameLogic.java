@@ -6,9 +6,11 @@ import org.example.multigame.shared.PlayerState;
 import org.example.multigame.shared.ProjectileState;
 
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerGameLogic {
     public GameState state = new GameState();
+    private int idCounter = 1;
     private final int speed = 5;
     private long lastTimerUpdate = System.currentTimeMillis();
     private static final int PROJECTILE_SPEED = 8;
@@ -21,6 +23,12 @@ public class ServerGameLogic {
         state.player3 = new PlayerState(450-20, 250-20,false);
         state.player4 = new PlayerState(50-20, 250-20,false);
         state.gameTimer = 5;
+        state.activeLobbies = new ConcurrentHashMap<>();
+    }
+
+    public synchronized int getNextPlayerId() {
+        if (idCounter > 4) return -1; // Lobby full
+        return idCounter++;
     }
 
     public synchronized void applyInput(PlayerInput input, int playerId) {
