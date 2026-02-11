@@ -100,69 +100,54 @@ public class Game extends JFrame implements Runnable {
             }
         }
     }
-    private static List<String> fetchLobbies(String ip) {
-        try (Socket socket = new Socket(ip, 5555);
-             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-
-            out.writeObject("GET_LOBBIES");
-            out.flush();
-            return (List<String>) in.readObject();
-        } catch (Exception e) {
-            return new ArrayList<>(); // Return empty if server is down
-        }
-    }
+//    private static List<String> fetchLobbies(String ip) {
+//        try (Socket socket = new Socket(ip, 5555);
+//             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+//             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+//
+//            out.writeObject("GET_LOBBIES");
+//            out.flush();
+//            return (List<String>) in.readObject();
+//        } catch (Exception e) {
+//            return new ArrayList<>(); // Return empty if server is down
+//        }
+//    }
 
     public static void main(String[] args) throws Exception {
-        //new Game();
-        //LobbyList lobbyList = new LobbyList();
-        //lobbyList.createAndShowGUI();
-        /*String lobby = JOptionPane.showInputDialog(null,
-                "Enter Lobby Name:",
-                "Join/Create Game",
-                JOptionPane.QUESTION_MESSAGE);
-
-        if (lobby != null && !lobby.trim().isEmpty()) {
-            new Game(lobby);
-            System.out.println("Lobby is: " + lobby);
-        } else {
-            System.exit(0);
-        }
-        */
-
-        String serverIp = discoverServerIP();
-        System.out.println(serverIp);
-
-        if (serverIp == null) {
-            serverIp = JOptionPane.showInputDialog("Auto-Discovery failed. Enter IP manually:");
-        }
-
-        if (serverIp != null) {
-            List<String> lobbies = fetchLobbies(serverIp);
-            // ... show lobby browser as we did before
-        }
-
-        List<String> lobbies = fetchLobbies(serverIp);
-
-        String selectedLobby;
-        if (lobbies.isEmpty()) {
-            selectedLobby = JOptionPane.showInputDialog("No active lobbies. Enter name to create one:");
-        } else {
-            // Show a dropdown list of active lobbies + an option to create new
-            lobbies.add("Create New...");
-            selectedLobby = (String) JOptionPane.showInputDialog(null,
-                    "Select a Lobby:", "Lobby Browser",
-                    JOptionPane.QUESTION_MESSAGE, null,
-                    lobbies.toArray(), lobbies.get(0));
-
-            if ("Create New...".equals(selectedLobby)) {
-                selectedLobby = JOptionPane.showInputDialog("Enter new lobby name:");
-            }
-        }
-
-        if (selectedLobby != null && !selectedLobby.trim().isEmpty()) {
-            new Game(selectedLobby);
-        }
+//        String serverIp = discoverServerIP();
+//        System.out.println(serverIp);
+//
+//        if (serverIp == null) {
+//            serverIp = JOptionPane.showInputDialog("Auto-Discovery failed. Enter IP manually:");
+//        }
+//
+//        if (serverIp != null) {
+//            List<String> lobbies = fetchLobbies(serverIp);
+//            // ... show lobby browser as we did before
+//        }
+//
+//        List<String> lobbies = fetchLobbies(serverIp);
+//
+//        String selectedLobby;
+//        if (lobbies.isEmpty()) {
+//            selectedLobby = JOptionPane.showInputDialog("No active lobbies. Enter name to create one:");
+//        } else {
+//            // Show a dropdown list of active lobbies + an option to create new
+//            lobbies.add("Create New...");
+//            selectedLobby = (String) JOptionPane.showInputDialog(null,
+//                    "Select a Lobby:", "Lobby Browser",
+//                    JOptionPane.QUESTION_MESSAGE, null,
+//                    lobbies.toArray(), lobbies.get(0));
+//
+//            if ("Create New...".equals(selectedLobby)) {
+//                selectedLobby = JOptionPane.showInputDialog("Enter new lobby name:");
+//            }
+//        }
+//
+//        if (selectedLobby != null && !selectedLobby.trim().isEmpty()) {
+//            new Game(selectedLobby);
+//        }
+        GameFinder gameFinder = new GameFinder(discoverServerIP());
     }
     private static String discoverServerIP() {
         try (DatagramSocket socket = new DatagramSocket()) {

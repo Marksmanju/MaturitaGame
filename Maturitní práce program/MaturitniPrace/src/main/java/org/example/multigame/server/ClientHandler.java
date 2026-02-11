@@ -36,12 +36,6 @@ public class ClientHandler extends Thread {
         return idCounter++;
     }*/
     public void run() {
-                /*Ok so if i understand right, snapshot is a copy of the gamestate from server sent to the client
-                //First we send gamestate to logic where its changed accordingly.
-                //Logic gets the input and knowing what thread and game it is, it changes the correct player position
-                //Logic sends it here where the current state is copied and only thing changed
-                //Is the local player id, which is sent back*/
-
         try {
             // PHASE 1: Lobby Selection
             // The first thing the client sends must be the Lobby Name (String)
