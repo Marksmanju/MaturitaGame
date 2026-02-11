@@ -1,6 +1,10 @@
 package org.example.multigame.client;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,19 +16,18 @@ public class GameFinder{
     private String serverIp;
 
     public GameFinder(String serverIp) throws Exception {
-        //this.serverIp = serverIp;
-
 
         ArrayList<String> lobbyList = fetchLobbies(serverIp);
         System.out.println(lobbyList);
 
-        //JList<Object> list = new JList<>(lobbyList.toArray());
-
-
         JFrame frame = new JFrame();
 
         JList<Object> list = new JList<>(lobbyList.toArray());
+        JTextField inputField = new JTextField();
 
+        JButton createButton = new JButton("Create game");
+        JButton joinButton = new JButton("Join game");
+        JButton findButton = new JButton("Find game");
 
         // Creating instance of JButton
         //JButton button = new JButton(" GFG WebSite Click");
@@ -32,26 +35,88 @@ public class GameFinder{
         // x axis, y axis, width, height
         //button.setBounds(150, 200, 220, 50);
 
-        list.setBounds(0, 0, 220, 200);
+        list.setBounds(0, 0, 200, 600);
+        inputField.setBounds(200,0,200,20);
+
+        createButton.setBounds(200,50,150,25);
+        joinButton.setBounds(200,100,150,25);
+        findButton.setBounds(200,150,150,25);
+
+        if(inputField.getText().isEmpty()){
+            joinButton.setEnabled(false);
+            createButton.setEnabled(false);
+            findButton.setEnabled(false);
+        }
+        else {
+            joinButton.setEnabled(true);
+            createButton.setEnabled(true);
+            findButton.setEnabled(true);
+        }
+
+
+        inputField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                textChanged();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                textChanged();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                textChanged(); // This method is mainly for text formatting changes.
+            }
+
+            public void textChanged() {
+                if(inputField.getText().isEmpty()){
+                    joinButton.setEnabled(false);
+                    createButton.setEnabled(false);
+                    findButton.setEnabled(false);
+                }
+                else {
+                    joinButton.setEnabled(true);
+                    createButton.setEnabled(true);
+                    findButton.setEnabled(true);
+                }
+            }
+        });
+
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(!e.getValueIsAdjusting()){
+                    inputField.setText(list.getSelectedValue().toString());
+                }
+            }
+        });
 
         frame.add(list);
+        frame.add(inputField);
+        frame.add(createButton);
+        frame.add(joinButton);
+        frame.add(findButton);
+
 
         // adding button in JFrame
         //frame.add(button);
 
         // 400 width and 500 height
-        frame.setSize(500, 600);
+        frame.setSize(600, 600);
 
         // using no layout managers
         frame.setLayout(null);
 
         // making the frame visible
         frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         //JScrollPane scrollPane = new JScrollPane(list);
         //getContentPane().add(scrollPane);
 
-
-       /* frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       /*
 
 
         //Add the ubiquitous "Hello World" label.
@@ -61,12 +126,10 @@ public class GameFinder{
         frame.getContentPane().add(list);
         setSize(100,100);
 
-
-
         //Display the window.
         frame.pack();
         frame.setVisible(true);*/
-
+//------------------------------------------------------------------------------------------------------------------------------------------
         System.out.println(serverIp);
 
         if (serverIp == null) {
@@ -98,6 +161,8 @@ public class GameFinder{
 
         if (selectedLobby != null && !selectedLobby.trim().isEmpty()) {
             new Game(selectedLobby);
+            frame.dispose();
+
         }
     }
 
