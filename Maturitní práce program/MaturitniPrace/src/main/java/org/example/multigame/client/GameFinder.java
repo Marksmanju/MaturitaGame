@@ -6,6 +6,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -14,10 +16,19 @@ import java.util.List;
 
 public class GameFinder{
     private String serverIp;
+    private ArrayList<String> lobbyList;
+
 
     public GameFinder(String serverIp) throws Exception {
-
         ArrayList<String> lobbyList = fetchLobbies(serverIp);
+        JLabel errorField = new JLabel("");
+        JLabel majorErrorField = new JLabel("");
+
+        if (serverIp == null) {
+            majorErrorField.setText("Auto-Discovery failed. Enter IP manually:");
+            serverIp = null;
+        }
+        System.out.println(serverIp);
         System.out.println(lobbyList);
 
         JFrame frame = new JFrame();
@@ -29,11 +40,70 @@ public class GameFinder{
         JButton joinButton = new JButton("Join game");
         JButton findButton = new JButton("Find game");
 
+        String finalServerIp = serverIp;
+        findButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 1. Fetch the updated list from the server
+                ArrayList<String> updatedLobbies = fetchLobbies(finalServerIp);
+
+                // 2. Update the JList with the new data
+                list.setListData(updatedLobbies.toArray());
+            }
+        });
+
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selLobby = inputField.getText();
+                ArrayList<String> tempList = fetchLobbies(finalServerIp);
+
+
+                if(!tempList.contains(selLobby)){
+                    System.out.println("ret is true");
+                    if (selLobby != null && !selLobby.trim().isEmpty()) {
+                        try {
+                            new Game(selLobby);
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        frame.dispose();
+                    }
+                }
+            }
+        });
+
+        joinButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selLobby = inputField.getText();
+                ArrayList<String> tempList = fetchLobbies(finalServerIp);
+
+
+                if(tempList.contains(selLobby)){
+                    System.out.println("ret is true");
+                    if (selLobby != null && !selLobby.trim().isEmpty()) {
+                        try {
+                            new Game(selLobby);
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        frame.dispose();
+                    }
+                }
+            }
+        });
+
+
+
         // Creating instance of JButton
         //JButton button = new JButton(" GFG WebSite Click");
 
         // x axis, y axis, width, height
         //button.setBounds(150, 200, 220, 50);
+
+        errorField.setBounds(400,100,150,25);
+        majorErrorField.setBounds(200,400,350,25);
 
         list.setBounds(0, 0, 200, 600);
         inputField.setBounds(200,0,200,20);
@@ -45,12 +115,10 @@ public class GameFinder{
         if(inputField.getText().isEmpty()){
             joinButton.setEnabled(false);
             createButton.setEnabled(false);
-            findButton.setEnabled(false);
         }
         else {
             joinButton.setEnabled(true);
             createButton.setEnabled(true);
-            findButton.setEnabled(true);
         }
 
 
@@ -84,6 +152,8 @@ public class GameFinder{
             }
         });
 
+
+
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -98,6 +168,7 @@ public class GameFinder{
         frame.add(createButton);
         frame.add(joinButton);
         frame.add(findButton);
+        frame.add(majorErrorField);
 
 
         // adding button in JFrame
@@ -129,9 +200,10 @@ public class GameFinder{
         //Display the window.
         frame.pack();
         frame.setVisible(true);*/
-//------------------------------------------------------------------------------------------------------------------------------------------
-        System.out.println(serverIp);
 
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+/*
         if (serverIp == null) {
             serverIp = JOptionPane.showInputDialog("Auto-Discovery failed. Enter IP manually:");
         }
@@ -144,6 +216,8 @@ public class GameFinder{
         List<String> lobbies = fetchLobbies(serverIp);
 
         String selectedLobby;
+
+
         if (lobbies.isEmpty()) {
             selectedLobby = JOptionPane.showInputDialog("No active lobbies. Enter name to create one:");
         } else {
@@ -162,10 +236,8 @@ public class GameFinder{
         if (selectedLobby != null && !selectedLobby.trim().isEmpty()) {
             new Game(selectedLobby);
             frame.dispose();
-
-        }
+        }*/
     }
-
     private static ArrayList<String> fetchLobbies(String ip) {
         try (Socket socket = new Socket(ip, 5555);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -178,6 +250,8 @@ public class GameFinder{
             return new ArrayList<>(); // Return empty if server is down
         }
     }
+
+
 //    private static String discoverServerIP() {
 //        try (DatagramSocket socket = new DatagramSocket()) {
 //            socket.setBroadcast(true);
