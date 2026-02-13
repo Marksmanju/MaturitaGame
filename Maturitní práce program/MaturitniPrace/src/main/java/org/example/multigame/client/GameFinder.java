@@ -21,13 +21,16 @@ public class GameFinder{
 
     public GameFinder(String serverIp) throws Exception {
         ArrayList<String> lobbyList = fetchLobbies(serverIp);
+
         JLabel errorField = new JLabel("");
         JLabel majorErrorField = new JLabel("");
-
+        errorField.setForeground(Color.RED);
+        majorErrorField.setForeground(Color.RED);
         if (serverIp == null) {
             majorErrorField.setText("Auto-Discovery failed. Enter IP manually:");
             serverIp = null;
         }
+
         System.out.println(serverIp);
         System.out.println(lobbyList);
 
@@ -41,6 +44,7 @@ public class GameFinder{
         JButton findButton = new JButton("Find game");
 
         String finalServerIp = serverIp;
+
         findButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,6 +74,9 @@ public class GameFinder{
                         frame.dispose();
                     }
                 }
+                else{
+                    errorField.setText("Room '" + selLobby + "' already exists.");
+                }
             }
         });
 
@@ -90,19 +97,14 @@ public class GameFinder{
                         }
                         frame.dispose();
                     }
+                }else{
+                    errorField.setText("Room '" + selLobby + "' doesn't exists.");
                 }
             }
         });
 
 
-
-        // Creating instance of JButton
-        //JButton button = new JButton(" GFG WebSite Click");
-
-        // x axis, y axis, width, height
-        //button.setBounds(150, 200, 220, 50);
-
-        errorField.setBounds(400,100,150,25);
+        errorField.setBounds(400,100,350,25);
         majorErrorField.setBounds(200,400,350,25);
 
         list.setBounds(0, 0, 200, 600);
@@ -120,7 +122,6 @@ public class GameFinder{
             joinButton.setEnabled(true);
             createButton.setEnabled(true);
         }
-
 
         inputField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -152,8 +153,6 @@ public class GameFinder{
             }
         });
 
-
-
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -169,74 +168,13 @@ public class GameFinder{
         frame.add(joinButton);
         frame.add(findButton);
         frame.add(majorErrorField);
+        frame.add(errorField);
 
-
-        // adding button in JFrame
-        //frame.add(button);
-
-        // 400 width and 500 height
         frame.setSize(600, 600);
-
-        // using no layout managers
         frame.setLayout(null);
-
-        // making the frame visible
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //JScrollPane scrollPane = new JScrollPane(list);
-        //getContentPane().add(scrollPane);
-
-       /*
-
-
-        //Add the ubiquitous "Hello World" label.
-        JLabel label = new JLabel("Hello World");
-        JList list = new JList<>(lobbyList.toArray());
-        //frame.getContentPane().add(label);
-        frame.getContentPane().add(list);
-        setSize(100,100);
-
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);*/
-
-
-//------------------------------------------------------------------------------------------------------------------------------------------
-/*
-        if (serverIp == null) {
-            serverIp = JOptionPane.showInputDialog("Auto-Discovery failed. Enter IP manually:");
-        }
-
-        if (serverIp != null) {
-            List<String> lobbies = fetchLobbies(serverIp);
-            // ... show lobby browser as we did before
-        }
-
-        List<String> lobbies = fetchLobbies(serverIp);
-
-        String selectedLobby;
-
-
-        if (lobbies.isEmpty()) {
-            selectedLobby = JOptionPane.showInputDialog("No active lobbies. Enter name to create one:");
-        } else {
-            // Show a dropdown list of active lobbies + an option to create new
-            lobbies.add("Create New...");
-            selectedLobby = (String) JOptionPane.showInputDialog(null,
-                    "Select a Lobby:", "Lobby Browser",
-                    JOptionPane.QUESTION_MESSAGE, null,
-                    lobbies.toArray(), lobbies.get(0));
-
-            if ("Create New...".equals(selectedLobby)) {
-                selectedLobby = JOptionPane.showInputDialog("Enter new lobby name:");
-            }
-        }
-
-        if (selectedLobby != null && !selectedLobby.trim().isEmpty()) {
-            new Game(selectedLobby);
-            frame.dispose();
-        }*/
     }
     private static ArrayList<String> fetchLobbies(String ip) {
         try (Socket socket = new Socket(ip, 5555);
@@ -250,29 +188,4 @@ public class GameFinder{
             return new ArrayList<>(); // Return empty if server is down
         }
     }
-
-
-//    private static String discoverServerIP() {
-//        try (DatagramSocket socket = new DatagramSocket()) {
-//            socket.setBroadcast(true);
-//            socket.setSoTimeout(2000); // Wait 2 seconds max
-//
-//            byte[] sendData = "DISCOVER_GAME_SERVER".getBytes();
-//            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,
-//                    InetAddress.getByName("255.255.255.255"), 8888);
-//            socket.send(sendPacket);
-//
-//            byte[] recvBuf = new byte[15000];
-//            DatagramPacket receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
-//            socket.receive(receivePacket);
-//
-//            String response = new String(receivePacket.getData()).trim();
-//            if (response.equals("I_AM_THE_SERVER")) {
-//                return receivePacket.getAddress().getHostAddress();
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Server not found automatically.");
-//        }
-//        return null;
-//    }
 }

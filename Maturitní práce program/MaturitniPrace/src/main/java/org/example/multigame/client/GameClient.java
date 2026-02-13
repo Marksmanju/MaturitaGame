@@ -13,12 +13,6 @@ public class GameClient {
     private ObjectInputStream in;
     private int assignedId;
 
-    /*public GameClient(String ip) throws IOException {
-        Socket socket = new Socket(ip, 5555);
-        out = new ObjectOutputStream(socket.getOutputStream());
-        in = new ObjectInputStream(socket.getInputStream());
-    }*/
-
     public GameClient(String ip, String lobbyName) throws IOException {
         Socket socket = new Socket(ip, 5555);
         out = new ObjectOutputStream(socket.getOutputStream());
