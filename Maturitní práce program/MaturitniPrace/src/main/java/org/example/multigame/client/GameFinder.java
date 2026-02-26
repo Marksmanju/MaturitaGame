@@ -35,6 +35,8 @@ public class GameFinder{
         System.out.println(lobbyList);
 
         JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+
 
         JList<Object> list = new JList<>(lobbyList.toArray());
         JTextField inputField = new JTextField();
@@ -114,6 +116,8 @@ public class GameFinder{
         joinButton.setBounds(200,100,150,25);
         findButton.setBounds(200,150,150,25);
 
+
+
         if(inputField.getText().isEmpty()){
             joinButton.setEnabled(false);
             createButton.setEnabled(false);
@@ -174,6 +178,7 @@ public class GameFinder{
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
 
     }
     private static ArrayList<String> fetchLobbies(String ip) {

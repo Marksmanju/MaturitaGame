@@ -1,10 +1,13 @@
 package org.example.multigame.client;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import org.example.multigame.lobby.LobbyList;
 import org.example.multigame.shared.GameState;
 import org.example.multigame.shared.PlayerInput;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -25,7 +28,6 @@ public class Game extends JFrame implements Runnable {
     private PlayerInput bimput = new PlayerInput();
     private volatile boolean up, down, left, right;
     private volatile int mouseX,mouseY;
-
 
     public Game(String lobbyName) throws Exception {
         try {
@@ -147,6 +149,11 @@ public class Game extends JFrame implements Runnable {
 //        if (selectedLobby != null && !selectedLobby.trim().isEmpty()) {
 //            new Game(selectedLobby);
 //        }
+        try {
+            UIManager.setLookAndFeel( new FlatDarculaLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
+        }
         GameFinder gameFinder = new GameFinder(discoverServerIP());
     }
     private static String discoverServerIP() {

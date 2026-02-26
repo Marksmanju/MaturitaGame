@@ -1,12 +1,14 @@
-package org.example.multigame.server;
+package org.example.multigame.Zaloha;
 
-import org.example.multigame.shared.*;
+import org.example.multigame.shared.GameState;
+import org.example.multigame.shared.PlayerInput;
+import org.example.multigame.shared.PlayerState;
+import org.example.multigame.shared.ProjectileState;
 
 import java.util.Iterator;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerGameLogic {
+public class ServerGameLogicZ {
     public GameState state = new GameState();
     private int idCounter = 1;
     private final int speed = 5;
@@ -14,15 +16,13 @@ public class ServerGameLogic {
     private static final int PROJECTILE_SPEED = 8;
     private static final int PROJECTILE_TTL = 120; // ~2 seconds at 60 FPS
     private int projectileMultiplier = 0;
-    Random random = new Random();
 
 
-    public ServerGameLogic() {
+    public ServerGameLogicZ() {
         state.player1 = new PlayerState(250-20, 50-20,false);
         state.player2 = new PlayerState(250-20, 450-20,false);
         state.player3 = new PlayerState(450-20, 250-20,false);
         state.player4 = new PlayerState(50-20, 250-20,false);
-        state.pointState = new PointState(random.nextInt(500),random.nextInt(500) );
         state.gameTimer = 5;
         state.activeLobbies = new ConcurrentHashMap<>();
     }
@@ -39,11 +39,13 @@ public class ServerGameLogic {
                 : (playerId == 4) ? state.player4
                 : null;
         //System.out.println("Input is applied");
-        if (input.up) p.y -= speed;
-        if (input.down) p.y += speed;
-        if (input.left)  p.x -= speed;
-        if (input.right)  p.x += speed;
+        if ((input.up) && (playerId == 3 || playerId == 4) && (p.y > 140)) p.y -= speed;
+        if ((input.down) && (playerId == 3 || playerId == 4)&& (p.y < 320)) p.y += speed;
+        if ((input.left)  && (playerId == 1 || playerId == 2)&& (p.x > 140)) p.x -= speed;
+        if ((input.right) && (playerId == 1 || playerId == 2)&& (p.x < 320)) p.x += speed;
 
+        p.targetMouseX = input.mouseX;
+        p.targetMouseY = input.mouseY;
     }
 
     public synchronized void setOnline(int playerId){
@@ -61,36 +63,12 @@ public class ServerGameLogic {
                 : (playerId == 4) ? state.player4.online = false
                 : null;
     }
-    public synchronized void pointTouched(int playerId){
-        //System.out.println("FUCKKKKKKK");
-        PlayerState p = (playerId == 1) ? state.player1
-                : (playerId == 2) ? state.player2
-                : (playerId == 3) ? state.player3
-                : (playerId == 4) ? state.player4
-                : null;
-        PointState point = state.pointState;
-        if (((p.x < point.x + 20) && (p.x > point.x -20)) && ((p.y < point.y+20) && (p.y > point.y-20))){
-            p.score += 1;
-            System.out.println(p.score);
-            System.out.println(state.player1.score);
-            System.out.println(state.player2.score);
-            System.out.println(state.player3.score);
-            System.out.println(state.player4.score);
-            changePointPosition();
-            p.score += 1;
-        }
-    }
 
-    public synchronized void changePointPosition(){
-        PointState p = state.pointState;
-        p.x = random.nextInt(450);
-        p.y = random.nextInt(450);
-    }
 
     public synchronized void changeGameState(){
 
     }
-    /*
+
     private void spawnProjectiles() {
         spawnForPlayer(state.player1);
         spawnForPlayer(state.player2);
@@ -145,5 +123,5 @@ public class ServerGameLogic {
             }
         }
     }
-*/
+
 }

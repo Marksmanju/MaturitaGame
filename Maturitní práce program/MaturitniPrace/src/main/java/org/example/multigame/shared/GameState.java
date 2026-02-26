@@ -13,6 +13,7 @@ public class GameState implements Serializable{
     public int gameTimer;
 
     public ArrayList<ProjectileState> projectileStates = new ArrayList<>();
+    public PointState pointState;
 
     public Map<String, ServerGameLogic> activeLobbies;
 
@@ -40,6 +41,7 @@ public class GameState implements Serializable{
         gs.player2 = player2.copy();
         gs.player3 = player3.copy();
         gs.player4 = player4.copy();
+        gs.pointState = pointState.copy();
         return gs;
     }
 }
