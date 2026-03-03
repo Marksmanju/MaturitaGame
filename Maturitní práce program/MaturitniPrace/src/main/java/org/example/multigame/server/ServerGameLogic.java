@@ -23,7 +23,7 @@ public class ServerGameLogic {
         state.player3 = new PlayerState(450-20, 250-20,false);
         state.player4 = new PlayerState(50-20, 250-20,false);
         state.pointState = new PointState(random.nextInt(500),random.nextInt(500) );
-        state.gameTimer = 5;
+        state.gameTimer = 120;
         state.activeLobbies = new ConcurrentHashMap<>();
     }
 
@@ -69,8 +69,7 @@ public class ServerGameLogic {
                 : (playerId == 4) ? state.player4
                 : null;
         PointState point = state.pointState;
-        if (((p.x < point.x + 20) && (p.x > point.x -20)) && ((p.y < point.y+20) && (p.y > point.y-20))){
-            p.score += 1;
+        if (((p.x < point.x +20) && (p.x > point.x -40)) && ((p.y < point.y+20) && (p.y > point.y-40))){
             System.out.println(p.score);
             System.out.println(state.player1.score);
             System.out.println(state.player2.score);
@@ -116,21 +115,16 @@ public class ServerGameLogic {
                 )
         );
     }
-
+*/
     public synchronized void updateTimer() {
         long now = System.currentTimeMillis();
 
         if (now - lastTimerUpdate >= 1000) { // 1 second
             lastTimerUpdate = now;
-
-            if (state.gameTimer <= 0) {
-                state.gameTimer = 5;
-                spawnProjectiles();
-            } else {
-                state.gameTimer--;
-            }
+            state.gameTimer--;
         }
     }
+    /*
     public synchronized void updateProjectiles() {
         Iterator<ProjectileState> it = state.projectileStates.iterator();
         while (it.hasNext()) {

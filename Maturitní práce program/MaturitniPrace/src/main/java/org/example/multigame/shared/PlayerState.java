@@ -15,6 +15,10 @@ public class PlayerState implements Serializable {
         this.online = online;
     }
     public PlayerState copy() {
-        return new PlayerState(x, y, online);
+        PlayerState copy = new PlayerState(x, y, online);
+        // MANUALLY COPY THE SCORE (This was missing!)
+        copy.score = this.score;
+        copy.id = this.id;
+        return copy;
     }
 }

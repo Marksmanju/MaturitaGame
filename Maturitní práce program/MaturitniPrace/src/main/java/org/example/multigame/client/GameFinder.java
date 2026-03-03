@@ -1,6 +1,7 @@
 package org.example.multigame.client;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -14,9 +15,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameFinder{
+public class GameFinder extends JFrame{
     private String serverIp;
     private ArrayList<String> lobbyList;
+    private GameFinderGraphics graphics;
 
 
     public GameFinder(String serverIp) throws Exception {
@@ -33,10 +35,6 @@ public class GameFinder{
 
         System.out.println(serverIp);
         System.out.println(lobbyList);
-
-        JFrame frame = new JFrame();
-        JPanel panel = new JPanel();
-
 
         JList<Object> list = new JList<>(lobbyList.toArray());
         JTextField inputField = new JTextField();
@@ -73,7 +71,7 @@ public class GameFinder{
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
-                        frame.dispose();
+                        dispose();
                     }
                 }
                 else{
@@ -97,7 +95,7 @@ public class GameFinder{
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
-                        frame.dispose();
+                        dispose();
                     }
                 }else{
                     errorField.setText("Room '" + selLobby + "' doesn't exists.");
@@ -105,18 +103,12 @@ public class GameFinder{
             }
         });
 
-
-        errorField.setBounds(400,100,350,25);
-        majorErrorField.setBounds(200,400,350,25);
-
-        list.setBounds(0, 0, 200, 600);
-        inputField.setBounds(200,0,200,20);
+        list.setBounds(1, 1, 199, 461);
+        inputField.setBounds(200,1,200,20);
 
         createButton.setBounds(200,50,150,25);
         joinButton.setBounds(200,100,150,25);
         findButton.setBounds(200,150,150,25);
-
-
 
         if(inputField.getText().isEmpty()){
             joinButton.setEnabled(false);
@@ -166,20 +158,44 @@ public class GameFinder{
             }
         });
 
-        frame.add(list);
-        frame.add(inputField);
-        frame.add(createButton);
-        frame.add(joinButton);
-        frame.add(findButton);
-        frame.add(majorErrorField);
-        frame.add(errorField);
+        Border border =  BorderFactory.createLineBorder(new Color(0, 255, 235));
 
-        frame.setSize(600, 600);
-        frame.setLayout(null);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        createButton.setBackground(Color.white);
+        createButton.setBorder(border);
+        createButton.setForeground(Color.black);
 
+        inputField.setBackground(Color.white);
+        inputField.setSelectedTextColor(Color.white);
+        inputField.setDisabledTextColor(Color.black);
+        inputField.setSelectionColor(Color.black);
+        inputField.setCaretColor(Color.black);
+        inputField.setForeground(Color.black);
+        inputField.setBorder(border);
+
+        list.setBackground(Color.black);
+        list.setBorder(border);
+        list.setForeground(Color.white);
+        list.setSelectionBackground(Color.white);
+        list.setSelectionForeground(Color.black);
+
+        GameFinderGraphics background = new GameFinderGraphics(serverIp);
+        background.setLayout(null);
+        setContentPane(background);
+
+        add(list);
+        add(inputField);
+        add(createButton);
+        add(joinButton);
+        add(findButton);
+        add(majorErrorField);
+        add(errorField);
+
+
+        setTitle("Lobby: ");
+        setSize(500, 500);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+        setResizable(false);
     }
     private static ArrayList<String> fetchLobbies(String ip) {
         try (Socket socket = new Socket(ip, 5555);

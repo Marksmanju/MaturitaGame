@@ -1,7 +1,7 @@
 package org.example.multigame.client;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+/*import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;*/
 import org.example.multigame.lobby.LobbyList;
 import org.example.multigame.shared.GameState;
 import org.example.multigame.shared.PlayerInput;
@@ -42,13 +42,18 @@ public class Game extends JFrame implements Runnable {
             }
             throw e; // Rethrow other connection errors
         }
+
+
         graphics = new GameGraphics(); // CREATES NEW GAMEGRAPHICS OBJECT
+
+
 
         add(graphics); //ADDS GRAPHICS AS A COMPONENT
         setTitle("Lobby: " + lobbyName);
-        setSize(500, 500);
+        setSize(800, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+        setResizable(false);
 
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
@@ -149,11 +154,12 @@ public class Game extends JFrame implements Runnable {
 //        if (selectedLobby != null && !selectedLobby.trim().isEmpty()) {
 //            new Game(selectedLobby);
 //        }
+/*
         try {
             UIManager.setLookAndFeel( new FlatDarculaLaf() );
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize LaF" );
-        }
+        }*/
         GameFinder gameFinder = new GameFinder(discoverServerIP());
     }
     private static String discoverServerIP() {

@@ -73,7 +73,7 @@ public class ClientHandler extends Thread {
                 logic.applyInput(input, playerId);
                 logic.setOnline(playerId);
                 logic.pointTouched(playerId);
-                //logic.updateTimer();
+                logic.updateTimer();
                 //logic.updateProjectiles();
                 /*Ok so if i understand right, snapshot is a copy of the gamestate from server sent to the client
                 //First we send gamestate to logic where its changed accordingly.
