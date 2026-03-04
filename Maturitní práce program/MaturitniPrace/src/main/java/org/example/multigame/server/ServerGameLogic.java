@@ -18,11 +18,11 @@ public class ServerGameLogic {
 
 
     public ServerGameLogic() {
-        state.player1 = new PlayerState(250-20, 50-20,false);
+        state.player1 = new PlayerState(250-20, 160-20,false);
         state.player2 = new PlayerState(250-20, 450-20,false);
         state.player3 = new PlayerState(450-20, 250-20,false);
         state.player4 = new PlayerState(50-20, 250-20,false);
-        state.pointState = new PointState(random.nextInt(500),random.nextInt(500) );
+        state.pointState = new PointState(random.nextInt(0,800-50),random.nextInt(120,800-70) );
         state.gameTimer = 120;
         state.activeLobbies = new ConcurrentHashMap<>();
     }
@@ -39,10 +39,10 @@ public class ServerGameLogic {
                 : (playerId == 4) ? state.player4
                 : null;
         //System.out.println("Input is applied");
-        if (input.up) p.y -= speed;
-        if (input.down) p.y += speed;
-        if (input.left)  p.x -= speed;
-        if (input.right)  p.x += speed;
+        if ((input.up) && !(p.y - speed <= 120-2)) p.y -= speed;
+        if ((input.down) && !(p.y + speed >= 800 -70)) p.y += speed;
+        if ((input.left) && !(p.x - speed <= 0-2)) p.x -= speed;
+        if ((input.right) && !(p.x + speed >= 800 -50))  p.x += speed;
 
     }
 
@@ -82,8 +82,8 @@ public class ServerGameLogic {
 
     public synchronized void changePointPosition(){
         PointState p = state.pointState;
-        p.x = random.nextInt(450);
-        p.y = random.nextInt(450);
+        p.x = random.nextInt(0,800-50);
+        p.y = random.nextInt(120,800-70);
     }
 
     public synchronized void changeGameState(){

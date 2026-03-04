@@ -15,8 +15,14 @@ public class GameGraphics extends JPanel {
     ImageIcon player4Image = new ImageIcon(getClass().getResource("/" + "Green.png"));
     ImageIcon pointImage = new ImageIcon(getClass().getResource("/" + "Point.gif"));
     ImageIcon backImage = new ImageIcon(getClass().getResource("/" + "Back.png"));
+    ImageIcon guiImage = new ImageIcon(getClass().getResource("/" + "GuiGame.png"));
+    ImageIcon guiBlue = new ImageIcon(getClass().getResource("/" + "GuiBlue.png"));
+    ImageIcon guiRed = new ImageIcon(getClass().getResource("/" + "GuiRed.png"));
+    ImageIcon guiYellow = new ImageIcon(getClass().getResource("/" + "GuiYellow.png"));
+    ImageIcon guiGreen = new ImageIcon(getClass().getResource("/" + "GuiGreen.png"));
 
-    Font timerFont = new Font("DS-Digital",Font.PLAIN,40);
+    Font scoreFont = new Font("DS-Digital",Font.PLAIN,40);
+    Font timerFont = new Font("DS-Digital",Font.PLAIN,100);
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -27,7 +33,22 @@ public class GameGraphics extends JPanel {
         g.fillRect(0,0,1000,1000);
 
         g.setColor(Color.black);
-        g.fillRect(0,0,1000,120);
+        switch (state.localPlayerId){
+            case 1:
+                g.drawImage(guiBlue.getImage(),0, 0, 786, 800,null);
+                break;
+            case 2:
+                g.drawImage(guiRed.getImage(),0, 0, 786, 800,null);
+                break;
+            case 3:
+                g.drawImage(guiYellow.getImage(),0, 0, 786, 800,null);
+                break;
+            case 4:
+                g.drawImage(guiGreen.getImage(),0, 0, 786, 800,null);
+                break;
+            default:
+                g.drawImage(guiImage.getImage(),0, 0, 786, 800,null);
+        }
 
         //g.drawImage(backImage.getImage(),0, 0, 800, 800,null);
 
@@ -63,21 +84,27 @@ public class GameGraphics extends JPanel {
         g.drawImage(pointImage.getImage(),state.pointState.x,state.pointState.y,20,20,this);
         
         g.setColor(Color.white);
-        g.setFont(timerFont);
-        g.drawString("Player: " + state.localPlayerId,35,80);
+        g.setFont(scoreFont);
+        //g.drawString("Player: " + state.localPlayerId,35,80);
         g.setColor(Color.cyan);
-        g.drawString("" + state.player1.score,680,50);
+        g.drawString("" + state.player1.score,290,50);
         g.setColor(Color.red);
-        g.drawString("" + state.player2.score,720,50);
+        g.drawString("" + state.player2.score,480,50);
         g.setColor(Color.yellow);
-        g.drawString("" + state.player3.score,680,80);
+        g.drawString("" + state.player3.score,290,100);
         g.setColor(Color.green);
-        g.drawString("" + state.player4.score,720,80);
+        g.drawString("" + state.player4.score,480,100);
         g.setColor(Color.white);
-        g.drawString("Time: " + state.gameTimer,35,50);
+        g.setFont(timerFont);
+        g.drawString(getFormattedTime(),35,90);
     }
     public void updateState(GameState state) {
         this.state = state;
         repaint();
+    }
+    public String getFormattedTime() {
+        int minutes = state.gameTimer / 60;
+        int seconds = state.gameTimer % 60;
+        return String.format("%d:%02d", minutes, seconds);
     }
 }

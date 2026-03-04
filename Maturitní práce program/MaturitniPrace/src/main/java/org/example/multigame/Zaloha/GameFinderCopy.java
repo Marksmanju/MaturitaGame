@@ -28,8 +28,7 @@ public class GameFinderCopy {
         errorField.setForeground(Color.RED);
         majorErrorField.setForeground(Color.RED);
         if (serverIp == null) {
-            majorErrorField.setText("Auto-Discovery failed. Enter IP manually:");
-            serverIp = null;
+            serverIp = JOptionPane.showInputDialog("Auto-Discovery failed. Enter IP manually:");
         }
 
         System.out.println(serverIp);
