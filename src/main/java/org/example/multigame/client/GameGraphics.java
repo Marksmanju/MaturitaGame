@@ -22,6 +22,7 @@ public class GameGraphics extends JPanel {
     ImageIcon guiYellow = new ImageIcon(getClass().getResource("/" + "GuiYellow.png"));
     ImageIcon guiGreen = new ImageIcon(getClass().getResource("/" + "GuiGreen.png"));
     ImageIcon colorlessImage = new ImageIcon(getClass().getResource("/" + "Colorless.png"));
+    ImageIcon bombImage = new ImageIcon(getClass().getResource("/" + "Bomb.gif"));
 
     Font scoreFont = new Font("DS-Digital",Font.PLAIN,40);
     Font timerFont = new Font("DS-Digital",Font.PLAIN,100);
@@ -100,8 +101,15 @@ public class GameGraphics extends JPanel {
         g.setColor(Color.WHITE);
         //g.fillOval(state.pointState.x,state.pointState.y,10,10);
         g.drawImage(pointImage.getImage(),state.pointState.x,state.pointState.y,20,20,this);
+
         g.drawImage(pointImage.getImage(),state.MpointState1.x,state.MpointState1.y,20,20,this);
         g.drawImage(pointImage.getImage(),state.MpointState2.x,state.MpointState2.y,20,20,this);
+
+        g.drawImage(bombImage.getImage(),state.bombState1.x,state.bombState1.y,20,20,this);
+        g.drawImage(bombImage.getImage(),state.bombState2.x,state.bombState2.y,20,20,this);
+        g.drawImage(bombImage.getImage(),state.bombState3.x,state.bombState3.y,20,20,this);
+
+
         
         g.setColor(Color.white);
         g.setFont(scoreFont);

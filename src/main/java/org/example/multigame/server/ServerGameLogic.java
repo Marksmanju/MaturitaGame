@@ -16,7 +16,9 @@ public class ServerGameLogic {
     private static final int PROJECTILE_TTL = 120; // ~2 seconds at 60 FPS
     private int projectileMultiplier = 0;
     Random random = new Random();
-    private boolean init = false;
+    private boolean pointInit = false;
+    private boolean bombInit = false;
+    private int eventHappen = 10;
 
 
     public ServerGameLogic() {
@@ -28,6 +30,10 @@ public class ServerGameLogic {
 
         state.MpointState1 = new PointState(5000,5000);
         state.MpointState2 = new PointState(5000,5000);
+
+        state.bombState1 = new BombState(5000,5000);
+        state.bombState2 = new BombState(5000,5000);
+        state.bombState3 = new BombState(5000,5000);
 
         state.preGameTimer = 5;
         state.gameTimer = 120;
@@ -140,6 +146,21 @@ public class ServerGameLogic {
         }
     }
 
+    public synchronized void bombTouched(int playerId, BombState bombState){
+        //System.out.println("FUCKKKKKKK");
+        PlayerState p = (playerId == 1) ? state.player1
+                : (playerId == 2) ? state.player2
+                : (playerId == 3) ? state.player3
+                : (playerId == 4) ? state.player4
+                : null;
+        BombState bomb = bombState;
+        if (((p.x < bomb.x +20) && (p.x > bomb.x -40)) && ((p.y < bomb.y+20) && (p.y > bomb.y-40))){
+            changeBombPosition(bomb);
+            p.score -= 1;
+        }
+    }
+
+
 
     public synchronized void changePointPosition(){
         PointState p = state.pointState;
@@ -149,7 +170,7 @@ public class ServerGameLogic {
         p.x = random.nextInt(0,800-50);
         p.y = random.nextInt(120,800-70);
 
-        if(state.events == Events.MOREPOINTS) {
+        if((state.events == Events.MOREPOINTS ) || (state.events == Events.FAKEPOINTS)) {
             p2.x = random.nextInt(0, 800 - 50);
             p2.y = random.nextInt(120, 800 - 70);
 
@@ -170,26 +191,54 @@ public class ServerGameLogic {
         p.y = random.nextInt(120,800-70);
     }
 
+    public synchronized void changeBombPosition(BombState bombState){
+        BombState b = bombState;
+        b.x = random.nextInt(0,800-50);
+        b.y = random.nextInt(120,800-70);
+    }
+
     public synchronized void changeGameState(){
 
     }
     public synchronized void morePoints(){
-        if (state.events == Events.MOREPOINTS){
-            if(init == false) {
+        if ((state.events == Events.MOREPOINTS) || (state.events == Events.FAKEPOINTS)){
+            if(pointInit == false) {
                 changePointPosition(state.MpointState1);
                 changePointPosition(state.MpointState2);
-                init = true;
+                pointInit = true;
             }else {
 
             }
         }else {
-            init = false;
+            pointInit = false;
             state.MpointState1.x = 5000;
             state.MpointState1.y = 5000;
             state.MpointState2.x = 5000;
             state.MpointState2.y = 5000;
         }
     }
+
+    public synchronized void bombs(){
+        if (state.events == Events.BOMBS){
+            if(bombInit == false) {
+                changeBombPosition(state.bombState1);
+                changeBombPosition(state.bombState2);
+                changeBombPosition(state.bombState3);
+                bombInit = true;
+            }else {
+
+            }
+        }else {
+            bombInit = false;
+            state.bombState1.x = 5000;
+            state.bombState1.y = 5000;
+            state.bombState2.x = 5000;
+            state.bombState2.y = 5000;
+            state.bombState3.x = 5000;
+            state.bombState3.y = 5000;
+        }
+    }
+
 
      public synchronized void updateGameTimer() {
         long now = System.currentTimeMillis();
@@ -210,6 +259,7 @@ public class ServerGameLogic {
 
                     if (state.gameTimer > 0){
                         state.gameTimer--;
+                        randomEvent();
                     }else {
                         state.stateOfGame = 2;
                     }
@@ -243,28 +293,39 @@ public class ServerGameLogic {
     }
 
     public synchronized void randomEvent(){
-        int ranEvent = random.nextInt(7);
-        switch (ranEvent){
-            case 1:
-                state.events = Events.INVISIBLE;
-                break;
-            case 2:
-                state.events = Events.SPEEDDOWN;
-                break;
-            case 3:
-                state.events = Events.SPEEDUP;
-                break;
-            case 4:
-                state.events = Events.FAKEPOINTS;
-                break;
-            case 5:
-                state.events = Events.MOREPOINTS;
-                break;
-            case 6:
-                state.events = Events.INVISIBLE;
-                break;
-            default:
-                state.events = Events.NONE;
+        if (state.gameTimer > 60){
+            eventHappen --;
+        }
+        else {
+            eventHappen -= 2;
+        }
+
+        int ranEvent;
+        if (eventHappen <= 0){
+            ranEvent = random.nextInt(9); //9 Due to there being a bigger chance for none to happen
+            switch (ranEvent){
+                case 1:
+                    state.events = Events.BOMBS;
+                    break;
+                case 2:
+                    state.events = Events.SPEEDDOWN;
+                    break;
+                case 3:
+                    state.events = Events.SPEEDUP;
+                    break;
+                case 4:
+                    state.events = Events.FAKEPOINTS;
+                    break;
+                case 5:
+                    state.events = Events.MOREPOINTS;
+                    break;
+                case 6:
+                    state.events = Events.SAMECOLOR;
+                    break;
+                default:
+                    state.events = Events.NONE;
+            }
+            eventHappen = 10;
         }
     }
     /*

@@ -17,7 +17,11 @@ public class GameState implements Serializable{
 
     public ArrayList<ProjectileState> projectileStates = new ArrayList<>();
     public PointState pointState;
-    public BombState bombState;
+
+    public BombState bombState1;
+    public BombState bombState2;
+    public BombState bombState3;
+
     public PointState MpointState1;
     public PointState MpointState2;
     public Events events;
@@ -41,7 +45,9 @@ public class GameState implements Serializable{
         for (ProjectileState p : projectileStates) {
             gs.projectileStates.add(p.copy());
         }
-        gs.bombState = bombState.copy();
+        gs.bombState1 = bombState1.copy();
+        gs.bombState2 = bombState2.copy();
+        gs.bombState3 = bombState3.copy();
         gs.roomPlayerOnlineList = roomPlayerOnlineList;
         gs.stateOfGame = stateOfGame;
         gs.events = events;

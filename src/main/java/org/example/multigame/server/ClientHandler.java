@@ -2,6 +2,7 @@ package org.example.multigame.server;
 
 import org.example.multigame.bullshit.GameSession;
 import org.example.multigame.lobby.LobbyManager;
+import org.example.multigame.shared.Events;
 import org.example.multigame.shared.GameState;
 import org.example.multigame.shared.PlayerInput;
 
@@ -76,10 +77,16 @@ public class ClientHandler extends Thread {
                 logic.applyInput(input, playerId);
                 logic.setOnline(playerId);
                 logic.pointTouched(playerId);
-                logic.pointTouched(playerId,logic.state.MpointState1);
-                logic.pointTouched(playerId,logic.state.MpointState2);
+                if (logic.state.events != Events.FAKEPOINTS) {
+                    logic.pointTouched(playerId, logic.state.MpointState1);
+                    logic.pointTouched(playerId, logic.state.MpointState2);
+                }
+                logic.bombTouched(playerId,logic.state.bombState1);
+                logic.bombTouched(playerId,logic.state.bombState2);
+                logic.bombTouched(playerId,logic.state.bombState3);
                 logic.updateGameTimer();
                 logic.morePoints();
+                logic.bombs();
                 //logic.updateProjectiles();
                 /*Ok so if i understand right, snapshot is a copy of the gamestate from server sent to the client
                 //First we send gamestate to logic where its changed accordingly.
