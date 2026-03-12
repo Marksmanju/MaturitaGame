@@ -6,6 +6,7 @@ import org.example.multigame.shared.ProjectileState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameGraphics extends JPanel {
     private GameState state;
@@ -23,6 +24,8 @@ public class GameGraphics extends JPanel {
     ImageIcon guiGreen = new ImageIcon(getClass().getResource("/" + "GuiGreen.png"));
     ImageIcon colorlessImage = new ImageIcon(getClass().getResource("/" + "Colorless.png"));
     ImageIcon bombImage = new ImageIcon(getClass().getResource("/" + "Bomb.gif"));
+    ArrayList<Integer> winList = new ArrayList<>();
+
 
     Font scoreFont = new Font("DS-Digital",Font.PLAIN,40);
     Font timerFont = new Font("DS-Digital",Font.PLAIN,100);
@@ -127,8 +130,43 @@ public class GameGraphics extends JPanel {
         g.drawString(getFormattedTime(),35,90);
 
         g.setFont(scoreFont);
-        g.drawString(state.events.name(),500,90);
+
+
+
+        switch (state.stateOfGame){
+            case 0:
+                g.drawString("Get ready",550,70);
+                break;
+            case 1:
+                g.drawString(state.events.name(),550,70);
+                break;
+            case 2:
+                g.drawString("Game Over",550,70);
+                break;
+        }
+
+        g.setFont(timerFont);
+        /*
+        switch (state.winner.id){
+            case 0:
+                g.drawString("BLUE WINS",290, 160);
+                break;
+            case 1:
+                g.drawString("RED WINS",290, 160);
+                break;
+            case 2:
+                g.drawString("YELLOW WINS",290, 160);
+                break;
+            case 3:
+                g.drawString("GREEN WINS",290, 160);
+
+            default: g.drawString("SOMETHING BROKE OOPSY DOOPSY",290,160);
+        }*/
+
+
+
     }
+
     public void updateState(GameState state) {
         this.state = state;
         repaint();
@@ -140,10 +178,28 @@ public class GameGraphics extends JPanel {
             minutes = state.gameTimer / 60;
             seconds = state.gameTimer % 60;
         }
-        else{
+        else if (state.stateOfGame== 0){
             minutes = state.preGameTimer / 60;
             seconds = state.preGameTimer % 60;
+        }else{
+            minutes = state.postGameTimer / 60;
+            seconds = state.postGameTimer % 60;
         }
         return String.format("%d:%02d", minutes, seconds);
+    }
+    public static int largest(ArrayList<Integer> list) {
+        // Initialize maximum element
+        int max = list.get(0);
+
+        // Traversing and comparing max element
+        for (int i = 1; i < list.size(); i++)
+
+            // If current element is greater than max
+            if (list.get(i) > max)
+
+                // Then update max element
+                max = list.get(i);
+
+        return max;
     }
 }

@@ -13,7 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameFinder extends JFrame{
     private String serverIp;
@@ -192,22 +191,35 @@ public class GameFinder extends JFrame{
             }
         });
 
-        Border border =  BorderFactory.createLineBorder(new Color(0, 255, 235));
+        Border borderRed =  BorderFactory.createLineBorder(new Color(255, 0, 0));
+        Border borderBlue =  BorderFactory.createLineBorder(new Color(0, 53, 255));
+        Border borderYellow =  BorderFactory.createLineBorder(new Color(255, 242, 0));
+        Border borderGreen =  BorderFactory.createLineBorder(new Color(20, 255, 0));
+        Border borderBlack =  BorderFactory.createLineBorder(new Color(0, 0, 0));
+        Border borderWhite =  BorderFactory.createLineBorder(new Color(255, 255, 255));
 
-        createButton.setBackground(Color.white);
-        createButton.setBorder(border);
-        createButton.setForeground(Color.black);
+        createButton.setBackground(Color.black);
+        createButton.setBorder(borderRed);
+        createButton.setForeground(Color.white);
 
-        inputField.setBackground(Color.white);
-        inputField.setSelectedTextColor(Color.white);
-        inputField.setDisabledTextColor(Color.black);
-        inputField.setSelectionColor(Color.black);
-        inputField.setCaretColor(Color.black);
-        inputField.setForeground(Color.black);
-        inputField.setBorder(border);
+        findButton.setBackground(Color.black);
+        findButton.setBorder(borderBlue);
+        findButton.setForeground(Color.white);
+
+        joinButton.setBackground(Color.black);
+        joinButton.setBorder(borderGreen);
+        joinButton.setForeground(Color.white);
+
+        inputField.setBackground(Color.black);
+        inputField.setSelectedTextColor(Color.black);
+        inputField.setDisabledTextColor(Color.white);
+        inputField.setSelectionColor(Color.white);
+        inputField.setCaretColor(Color.white);
+        inputField.setForeground(Color.white);
+        inputField.setBorder(borderYellow);
 
         list.setBackground(Color.black);
-        list.setBorder(border);
+        list.setBorder(borderWhite);
         list.setForeground(Color.white);
         list.setSelectionBackground(Color.white);
         list.setSelectionForeground(Color.black);

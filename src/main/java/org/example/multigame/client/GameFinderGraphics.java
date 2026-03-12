@@ -20,7 +20,7 @@ public class GameFinderGraphics extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.setColor(new Color(0, 0, 0));
+        g.setColor(new Color(255, 255, 255));
         g.fillRect(0,0,1000,1000);
 
         g.setColor(Color.black);

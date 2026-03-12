@@ -98,7 +98,9 @@ public class Game extends JFrame implements Runnable {
 
                 GameState state = client.receiveState();
                 graphics.updateState(state);
-
+                if (state.postGameTimer == 0){
+                    System.exit(0);
+                }
 
 
                 Thread.sleep(16);

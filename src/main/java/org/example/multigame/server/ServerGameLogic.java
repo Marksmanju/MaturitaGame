@@ -20,13 +20,14 @@ public class ServerGameLogic {
     private boolean bombInit = false;
     private int eventHappen = 10;
 
-
     public ServerGameLogic() {
         state.player1 = new PlayerState(0, 120,false);
         state.player2 = new PlayerState(745, 120,false);
         state.player3 = new PlayerState(0, 720,false);
         state.player4 = new PlayerState(745, 720,false);
         state.pointState = new PointState(380,420);
+
+        state.winner = new PlayerState(9999,9999,false);
 
         state.MpointState1 = new PointState(5000,5000);
         state.MpointState2 = new PointState(5000,5000);
@@ -35,8 +36,9 @@ public class ServerGameLogic {
         state.bombState2 = new BombState(5000,5000);
         state.bombState3 = new BombState(5000,5000);
 
-        state.preGameTimer = 5;
-        state.gameTimer = 120;
+        state.preGameTimer = 15;
+        state.gameTimer = 20;
+        state.postGameTimer = 10;
         state.activeLobbies = new ConcurrentHashMap<>();
         state.events = Events.NONE;
         state.stateOfGame = 0;
@@ -85,7 +87,7 @@ public class ServerGameLogic {
         else{
             speedup = 1;
         }
-        if(state.stateOfGame != 0) {
+        if(state.stateOfGame == 1) {
             if ((input.up) && !(p.y - speed*speedup<= 120 - 2)) p.y -= speed*speedup;
             if ((input.down) && !(p.y + speed*speedup >= 800 - 70)) p.y += speed*speedup;
             if ((input.left) && !(p.x - speed*speedup <= 0 - 2)) p.x -= speed*speedup;
@@ -256,7 +258,6 @@ public class ServerGameLogic {
             case 1:
                 if (now - lastTimerUpdate >= 1000) { // 1 second
                     lastTimerUpdate = now;
-
                     if (state.gameTimer > 0){
                         state.gameTimer--;
                         randomEvent();
@@ -266,32 +267,24 @@ public class ServerGameLogic {
                 }
                 break;
             case 2:
+                if (now - lastTimerUpdate >= 1000) { // 1 second
+                    lastTimerUpdate = now;
+                    if (state.postGameTimer > 0){
+                        getWinner();
+                        state.events = Events.NONE;
+                        state.pointState.x = 5000;
+                        state.pointState.y = 5000;
+                        state.postGameTimer--;
+                    }else {
+
+                    }
+                }
                 break;
         }
     }
-    public synchronized void updateTimer() {
-        long now = System.currentTimeMillis();
+    public synchronized void endGame(){
 
-        if (now - lastTimerUpdate >= 1000) { // 1 second
-            lastTimerUpdate = now;
-            state.gameTimer--;
-        }
     }
-
-    public synchronized void updatePreGameTimer() {
-        long now = System.currentTimeMillis();
-
-        if (now - lastTimerUpdate >= 1000) { // 1 second
-            lastTimerUpdate = now;
-            if (state.preGameTimer >= 0){
-                state.preGameTimer--;
-            }else {
-
-            }
-
-        }
-    }
-
     public synchronized void randomEvent(){
         if (state.gameTimer > 60){
             eventHappen --;
@@ -327,6 +320,27 @@ public class ServerGameLogic {
             }
             eventHappen = 10;
         }
+    }
+    public synchronized void getWinner(){
+        ArrayList<PlayerState> winList = new ArrayList<>();
+
+        winList.add(state.player1);
+        winList.add(state.player2);
+        winList.add(state.player3);
+        winList.add(state.player4);
+
+        PlayerState max = winList.get(0);
+
+        for (int i = 0; i < winList.size(); i++){
+            if (winList.get(i).score > max.score){
+                // Then update max element
+                max = winList.get(i);
+            }
+        }
+        state.winner = max;
+        System.out.println("FUCK");
+        System.out.println("FUCK" + max.id);
+
     }
     /*
     public synchronized void updateProjectiles() {

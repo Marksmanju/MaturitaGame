@@ -13,6 +13,7 @@ public class GameState implements Serializable{
     public int gameState;
     public int gameTimer;
     public int preGameTimer;
+    public int postGameTimer;
     public int stateOfGame; // This is what state the game is in, ie. Waiting for the game to start, game started
 
     public ArrayList<ProjectileState> projectileStates = new ArrayList<>();
@@ -36,6 +37,8 @@ public class GameState implements Serializable{
     public PlayerState player3;
     public PlayerState player4;
 
+    public PlayerState winner;
+
 
     public GameState copy() {
         //THIS IS FOR STUFF ALL PLAYERS SHOULD SEE THE SAME
@@ -53,6 +56,7 @@ public class GameState implements Serializable{
         gs.events = events;
         gs.gameTimer = gameTimer;
         gs.preGameTimer = preGameTimer;
+        gs.postGameTimer = postGameTimer;
         gs.test = "TEST";
         gs.player1 = player1.copy();
         gs.player2 = player2.copy();
@@ -61,6 +65,7 @@ public class GameState implements Serializable{
         gs.pointState = pointState.copy();
         gs.MpointState1 = MpointState1.copy();
         gs.MpointState2 = MpointState2.copy();
+        gs.winner = winner.copy();
         return gs;
     }
 }
