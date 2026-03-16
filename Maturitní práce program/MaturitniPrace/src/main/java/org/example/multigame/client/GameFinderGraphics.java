@@ -11,6 +11,7 @@ public class GameFinderGraphics extends JPanel {
     public String serverIp;
     public ArrayList<String> lobbyList;
     ImageIcon ii = new ImageIcon(getClass().getResource("/" + "Back.gif"));
+    ImageIcon findImage = new ImageIcon(getClass().getResource("/" + "Back.gif"));
     public GameFinderGraphics(String serverIp) {
         this.serverIp = serverIp;
         this.lobbyList = fetchLobbies(serverIp);
@@ -19,16 +20,13 @@ public class GameFinderGraphics extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
-
-
-        g.setColor(new Color(53, 50, 57));
+        g.setColor(new Color(255, 255, 255));
         g.fillRect(0,0,1000,1000);
 
         g.setColor(Color.black);
         g.drawRect(1,1,150,500);
 
-        g.drawImage(ii.getImage(),0,0,500,500,this);
+        g.drawImage(findImage.getImage(),250, 250, 200, 200,this);
     }
     private static ArrayList<String> fetchLobbies(String ip) {
         try (Socket socket = new Socket(ip, 5555);
@@ -41,5 +39,13 @@ public class GameFinderGraphics extends JPanel {
         } catch (Exception e) {
             return new ArrayList<>(); // Return empty if server is down
         }
+    }
+
+    public ImageIcon getFindImage() {
+        return findImage;
+    }
+
+    public void setFindImage(ImageIcon findImage) {
+        this.findImage = findImage;
     }
 }

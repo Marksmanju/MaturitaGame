@@ -50,8 +50,6 @@ public class GameServer extends JFrame {
             // Pass the lobbyManager instead of a specific logic instance
             new ClientHandler(socket, lobbyManager).start();
         }
-
-
     }
 
     public static void main(String[] args) throws Exception {

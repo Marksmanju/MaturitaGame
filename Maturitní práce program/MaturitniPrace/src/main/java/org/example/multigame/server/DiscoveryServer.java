@@ -15,11 +15,13 @@ public class DiscoveryServer extends Thread {
                 DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
                 socket.receive(packet); // Wait for a client to shout "WHERE IS THE SERVER?"
 
+
                 String message = new String(packet.getData()).trim();
                 if (message.equals("DISCOVER_GAME_SERVER")) {
                     byte[] sendData = "I_AM_THE_SERVER".getBytes();
                     DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,
                             packet.getAddress(), packet.getPort());
+
                     socket.send(sendPacket); // Shout back: "I'm right here!"
                 }
             }

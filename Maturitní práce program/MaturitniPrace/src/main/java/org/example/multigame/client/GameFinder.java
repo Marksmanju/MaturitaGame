@@ -13,7 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameFinder extends JFrame{
     private String serverIp;
@@ -28,6 +27,7 @@ public class GameFinder extends JFrame{
         JLabel majorErrorField = new JLabel("");
         errorField.setForeground(Color.RED);
         majorErrorField.setForeground(Color.RED);
+
         if (serverIp == null) {
             serverIp = JOptionPane.showInputDialog("Auto-Discovery failed. Enter IP manually:");
         }
@@ -49,9 +49,15 @@ public class GameFinder extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 // 1. Fetch the updated list from the server
                 ArrayList<String> updatedLobbies = fetchLobbies(finalServerIp);
+                ArrayList<String> emptyList = new ArrayList<>();
 
                 // 2. Update the JList with the new data
-                list.setListData(updatedLobbies.toArray());
+                if((updatedLobbies.isEmpty()) || (updatedLobbies == null)){
+                    list.setListData(emptyList.toArray());
+                }else {
+                    list.setListData(updatedLobbies.toArray());
+                }
+
             }
         });
 
@@ -60,8 +66,6 @@ public class GameFinder extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String selLobby = inputField.getText();
                 ArrayList<String> tempList = fetchLobbies(finalServerIp);
-
-
                 if(!tempList.contains(selLobby)){
                     System.out.println("ret is true");
                     if (selLobby != null && !selLobby.trim().isEmpty()) {
@@ -103,11 +107,11 @@ public class GameFinder extends JFrame{
         });
 
         list.setBounds(1, 1, 199, 461);
-        inputField.setBounds(200,1,200,20);
+        inputField.setBounds(200,1,300,20);
 
-        createButton.setBounds(200,50,150,25);
-        joinButton.setBounds(200,100,150,25);
-        findButton.setBounds(200,150,150,25);
+        createButton.setBounds(260,50,150,25);
+        joinButton.setBounds(260,100,150,25);
+        findButton.setBounds(260,150,150,25);
 
         if(inputField.getText().isEmpty()){
             joinButton.setEnabled(false);
@@ -157,27 +161,69 @@ public class GameFinder extends JFrame{
             }
         });
 
-        Border border =  BorderFactory.createLineBorder(new Color(0, 255, 235));
+        GameFinderGraphics background = new GameFinderGraphics(serverIp);
 
-        createButton.setBackground(Color.white);
-        createButton.setBorder(border);
-        createButton.setForeground(Color.black);
+        findButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                background.setFindImage(new ImageIcon(getClass().getResource("/" + "Find.gif")));
+            }
 
-        inputField.setBackground(Color.white);
-        inputField.setSelectedTextColor(Color.white);
-        inputField.setDisabledTextColor(Color.black);
-        inputField.setSelectionColor(Color.black);
-        inputField.setCaretColor(Color.black);
-        inputField.setForeground(Color.black);
-        inputField.setBorder(border);
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                background.setFindImage(new ImageIcon(getClass().getResource("/" + "Back.gif")));
+            }
+        });
+        createButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                background.setFindImage(new ImageIcon(getClass().getResource("/" + "CreateGame.gif")));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                background.setFindImage(new ImageIcon(getClass().getResource("/" + "Back.gif")));
+            }
+        });
+        joinButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                background.setFindImage(new ImageIcon(getClass().getResource("/" + "JoinGame.gif")));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                background.setFindImage(new ImageIcon(getClass().getResource("/" + "Back.gif")));
+            }
+        });
+
+        Border borderRed =  BorderFactory.createLineBorder(new Color(255, 0, 0));
+        Border borderBlue =  BorderFactory.createLineBorder(new Color(0, 53, 255));
+        Border borderYellow =  BorderFactory.createLineBorder(new Color(255, 242, 0));
+        Border borderGreen =  BorderFactory.createLineBorder(new Color(20, 255, 0));
+        Border borderBlack =  BorderFactory.createLineBorder(new Color(0, 0, 0));
+        Border borderWhite =  BorderFactory.createLineBorder(new Color(255, 255, 255));
+
+        createButton.setBackground(Color.black);
+        createButton.setBorder(borderRed);
+        createButton.setForeground(Color.white);
+
+        findButton.setBackground(Color.black);
+        findButton.setBorder(borderBlue);
+        findButton.setForeground(Color.white);
+
+        joinButton.setBackground(Color.black);
+        joinButton.setBorder(borderGreen);
+        joinButton.setForeground(Color.white);
+
+        inputField.setBackground(Color.black);
+        inputField.setSelectedTextColor(Color.black);
+        inputField.setDisabledTextColor(Color.white);
+        inputField.setSelectionColor(Color.white);
+        inputField.setCaretColor(Color.white);
+        inputField.setForeground(Color.white);
+        inputField.setBorder(borderYellow);
 
         list.setBackground(Color.black);
-        list.setBorder(border);
+        list.setBorder(borderWhite);
         list.setForeground(Color.white);
         list.setSelectionBackground(Color.white);
         list.setSelectionForeground(Color.black);
 
-        GameFinderGraphics background = new GameFinderGraphics(serverIp);
         background.setLayout(null);
         setContentPane(background);
 
@@ -190,7 +236,7 @@ public class GameFinder extends JFrame{
         add(errorField);
 
 
-        setTitle("Lobby: ");
+        setTitle("Game finder");
         setSize(500, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
