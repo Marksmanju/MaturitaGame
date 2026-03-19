@@ -24,6 +24,7 @@ public class GameGraphics extends JPanel {
     ImageIcon guiGreen = new ImageIcon(getClass().getResource("/" + "GuiGreen.png"));
     ImageIcon colorlessImage = new ImageIcon(getClass().getResource("/" + "Colorless.png"));
     ImageIcon bombImage = new ImageIcon(getClass().getResource("/" + "Bomb.gif"));
+
     ArrayList<Integer> winList = new ArrayList<>();
 
 

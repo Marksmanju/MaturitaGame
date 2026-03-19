@@ -18,6 +18,7 @@ public class GameFinder extends JFrame{
     private String serverIp;
     private ArrayList<String> lobbyList;
     private GameFinderGraphics graphics;
+    private ImageIcon icon = new ImageIcon(getClass().getResource("/" + "Colorless.png"));
 
 
     public GameFinder(String serverIp) throws Exception {
@@ -106,12 +107,12 @@ public class GameFinder extends JFrame{
             }
         });
 
-        list.setBounds(1, 1, 199, 461);
-        inputField.setBounds(200,1,300,20);
+        list.setBounds(1, 500, 585, 263);
+        inputField.setBounds(150,1,300,40);
 
-        createButton.setBounds(260,50,150,25);
-        joinButton.setBounds(260,100,150,25);
-        findButton.setBounds(260,150,150,25);
+        createButton.setBounds(225,50,150,50);
+        joinButton.setBounds(225,100,150,50);
+        findButton.setBounds(225,150,150,50);
 
         if(inputField.getText().isEmpty()){
             joinButton.setEnabled(false);
@@ -142,7 +143,6 @@ public class GameFinder extends JFrame{
                 if(inputField.getText().isEmpty()){
                     joinButton.setEnabled(false);
                     createButton.setEnabled(false);
-                    findButton.setEnabled(false);
                 }
                 else {
                     joinButton.setEnabled(true);
@@ -198,6 +198,12 @@ public class GameFinder extends JFrame{
         Border borderBlack =  BorderFactory.createLineBorder(new Color(0, 0, 0));
         Border borderWhite =  BorderFactory.createLineBorder(new Color(255, 255, 255));
 
+        Font font = new Font("arial",Font.PLAIN,20);
+
+        createButton.setFont(font);
+        findButton.setFont(font);
+        joinButton.setFont(font);
+
         createButton.setBackground(Color.black);
         createButton.setBorder(borderRed);
         createButton.setForeground(Color.white);
@@ -218,6 +224,7 @@ public class GameFinder extends JFrame{
         inputField.setForeground(Color.white);
         inputField.setBorder(borderYellow);
 
+        list.setFont(font);
         list.setBackground(Color.black);
         list.setBorder(borderWhite);
         list.setForeground(Color.white);
@@ -237,10 +244,12 @@ public class GameFinder extends JFrame{
 
 
         setTitle("Game finder");
-        setSize(500, 500);
+        setSize(600, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
+        setLocationRelativeTo(null);
+        setIconImage(icon.getImage());
     }
     private static ArrayList<String> fetchLobbies(String ip) {
         try (Socket socket = new Socket(ip, 5555);

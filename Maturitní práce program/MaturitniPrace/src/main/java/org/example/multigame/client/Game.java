@@ -27,6 +27,7 @@ public class Game extends JFrame implements Runnable {
     private GameGraphics graphics;
     private PlayerInput bimput = new PlayerInput();
     private volatile boolean up, down, left, right;
+    ImageIcon icon = new ImageIcon(getClass().getResource("/" + "Colorless.png"));
 
     public Game(String lobbyName) throws Exception {
         try {
@@ -53,7 +54,7 @@ public class Game extends JFrame implements Runnable {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
-
+        setIconImage(icon.getImage());
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 setKey(e.getKeyCode(), true);

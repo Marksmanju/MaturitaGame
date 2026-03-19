@@ -23,10 +23,7 @@ public class GameFinderGraphics extends JPanel {
         g.setColor(new Color(255, 255, 255));
         g.fillRect(0,0,1000,1000);
 
-        g.setColor(Color.black);
-        g.drawRect(1,1,150,500);
-
-        g.drawImage(findImage.getImage(),250, 250, 200, 200,this);
+        g.drawImage(findImage.getImage(),200, 250, 200, 200,this);
     }
     private static ArrayList<String> fetchLobbies(String ip) {
         try (Socket socket = new Socket(ip, 5555);

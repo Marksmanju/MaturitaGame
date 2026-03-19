@@ -34,9 +34,9 @@ public class ServerGameLogic {
         state.bombState2 = new BombState(5000,5000);
         state.bombState3 = new BombState(5000,5000);
 
-        state.preGameTimer = 10;
-        state.gameTimer = 20;
-        state.postGameTimer = 10;
+        state.preGameTimer = 30;
+        state.gameTimer = 120;
+        state.postGameTimer = 15;
         state.activeLobbies = new ConcurrentHashMap<>();
         state.events = Events.NONE;
         state.stateOfGame = 0;
