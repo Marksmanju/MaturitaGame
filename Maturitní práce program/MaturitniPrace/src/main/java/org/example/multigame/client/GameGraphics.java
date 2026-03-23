@@ -2,7 +2,6 @@ package org.example.multigame.client;
 
 import org.example.multigame.shared.Events;
 import org.example.multigame.shared.GameState;
-import org.example.multigame.shared.ProjectileState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -91,9 +90,7 @@ public class GameGraphics extends JPanel {
         }
 
         g.setColor(Color.WHITE);
-        for (ProjectileState p : state.projectileStates) {
-            g.fillOval(p.x, p.y, 6, 6);
-        }
+
 
         g.setColor(Color.WHITE);
         //g.fillOval(state.pointState.x,state.pointState.y,10,10);

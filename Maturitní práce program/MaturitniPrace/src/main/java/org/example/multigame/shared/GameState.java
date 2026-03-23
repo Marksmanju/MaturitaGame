@@ -16,7 +16,6 @@ public class GameState implements Serializable{
     public int postGameTimer;
     public int stateOfGame; // This is what state the game is in, ie. Waiting for the game to start, game started
 
-    public ArrayList<ProjectileState> projectileStates = new ArrayList<>();
     public PointState pointState;
 
     public BombState bombState1;
@@ -44,10 +43,7 @@ public class GameState implements Serializable{
         //THIS IS FOR STUFF ALL PLAYERS SHOULD SEE THE SAME
         GameState gs = new GameState();
 
-        gs.projectileStates = new ArrayList<>();
-        for (ProjectileState p : projectileStates) {
-            gs.projectileStates.add(p.copy());
-        }
+
         gs.bombState1 = bombState1.copy();
         gs.bombState2 = bombState2.copy();
         gs.bombState3 = bombState3.copy();

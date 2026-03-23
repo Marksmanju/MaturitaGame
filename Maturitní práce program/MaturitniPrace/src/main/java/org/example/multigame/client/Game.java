@@ -81,7 +81,7 @@ public class Game extends JFrame implements Runnable {
         if (key == KeyEvent.VK_A) left = pressed;
         if (key == KeyEvent.VK_D) right = pressed;
     }
-
+    /*
     public void run() {
         while (true) {
             try {
@@ -106,7 +106,54 @@ public class Game extends JFrame implements Runnable {
             }
         }
     }
+*/
+    public void run() {
+        // 1. START A DEDICATED RECEIVE THREAD
+        // This thread handles incoming data from the server without blocking the UI
+        Thread receiveThread = new Thread(() -> {
+            while (true) {
+                try {
+                    GameState state = client.receiveState(); //
+                    if (state != null) {
+                        graphics.updateState(state); //
 
+                        // Handle game exit condition
+                        if (state.postGameTimer == 0) { //
+                            System.exit(0);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("Connection lost while receiving.");
+                    break;
+                }
+            }
+        });
+        receiveThread.setDaemon(true);
+        receiveThread.start();
+
+        // 2. MAIN INPUT/SEND LOOP (The Original Thread)
+        // This loop runs at a consistent ~60 FPS (16ms)
+        while (true) {
+            try {
+                PlayerInput input = new PlayerInput();
+                input.up = up; //
+                input.down = down; //
+                input.left = left; //
+                input.right = right; //
+                input.mouseX = bimput.mouseX; //
+                input.mouseY = bimput.mouseY; //
+
+                // Send current input to the server
+                client.sendInput(input); //
+
+                // Consistent tick rate of 16ms
+                Thread.sleep(16); //
+            } catch (Exception e) {
+                System.out.println("Connection lost while sending.");
+                break;
+            }
+        }
+    }
     public static void main(String[] args) throws Exception {
         GameFinder gameFinder = new GameFinder(discoverServerIP());
     }
