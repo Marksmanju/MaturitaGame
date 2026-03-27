@@ -325,7 +325,6 @@ public class ServerGameLogic {
                     }
                 }
             }
-            //state.winner = max;
             winInit = true;
         }
     }

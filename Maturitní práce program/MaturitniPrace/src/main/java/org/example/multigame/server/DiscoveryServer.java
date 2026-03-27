@@ -13,7 +13,7 @@ public class DiscoveryServer extends Thread {
             while (true) {
                 byte[] recvBuf = new byte[15000];
                 DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
-                socket.receive(packet); // Wait for a client to shout "WHERE IS THE SERVER?"
+                socket.receive(packet);
 
 
                 String message = new String(packet.getData()).trim();
@@ -22,7 +22,7 @@ public class DiscoveryServer extends Thread {
                     DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,
                             packet.getAddress(), packet.getPort());
 
-                    socket.send(sendPacket); // Shout back: "I'm right here!"
+                    socket.send(sendPacket);
                 }
             }
         } catch (Exception e) {

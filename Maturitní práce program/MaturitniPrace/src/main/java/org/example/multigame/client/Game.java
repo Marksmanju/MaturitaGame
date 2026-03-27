@@ -1,8 +1,5 @@
 package org.example.multigame.client;
 
-/*import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatLightLaf;*/
-
 import org.example.multigame.shared.GameState;
 import org.example.multigame.shared.PlayerInput;
 
@@ -25,7 +22,7 @@ import java.util.List;
 public class Game extends JFrame implements Runnable {
     private GameClient client;
     private GameGraphics graphics;
-    private PlayerInput bimput = new PlayerInput();
+    //private PlayerInput bimput = new PlayerInput();
     private volatile boolean up, down, left, right;
     ImageIcon icon = new ImageIcon(getClass().getResource("/" + "Colorless.png"));
 
@@ -65,12 +62,12 @@ public class Game extends JFrame implements Runnable {
                 setKey(e.getKeyCode(), false);
             }
         });
-        addMouseMotionListener(new MouseMotionAdapter() {
+        /*addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
                 bimput.mouseX = e.getX();
                 bimput.mouseY = e.getY();
             }
-        });
+        });*/
 
         new Thread(this).start();
     }
@@ -140,8 +137,8 @@ public class Game extends JFrame implements Runnable {
                 input.down = down; //
                 input.left = left; //
                 input.right = right; //
-                input.mouseX = bimput.mouseX; //
-                input.mouseY = bimput.mouseY; //
+                /*input.mouseX = bimput.mouseX; //
+                input.mouseY = bimput.mouseY;*/ //
 
                 // Send current input to the server
                 client.sendInput(input); //
