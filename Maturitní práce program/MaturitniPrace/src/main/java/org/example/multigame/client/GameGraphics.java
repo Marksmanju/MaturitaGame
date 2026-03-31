@@ -5,6 +5,7 @@ import org.example.multigame.shared.GameState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class GameGraphics extends JPanel {
@@ -25,8 +26,7 @@ public class GameGraphics extends JPanel {
     ImageIcon bombImage = new ImageIcon(getClass().getResource("/" + "Bomb.gif"));
 
     ArrayList<Integer> winList = new ArrayList<>();
-
-
+    
     Font scoreFont = new Font("DS-Digital",Font.PLAIN,40);
     Font timerFont = new Font("DS-Digital",Font.PLAIN,100);
 
