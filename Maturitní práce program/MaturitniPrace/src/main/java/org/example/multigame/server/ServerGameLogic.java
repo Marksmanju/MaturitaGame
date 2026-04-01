@@ -103,7 +103,6 @@ public class ServerGameLogic {
                 : null;
     }
     public synchronized void pointTouched(int playerId){
-        //System.out.println("FUCKKKKKKK");
         PlayerState p = (playerId == 1) ? state.player1
                 : (playerId == 2) ? state.player2
                 : (playerId == 3) ? state.player3
@@ -122,7 +121,7 @@ public class ServerGameLogic {
     }
 
     public synchronized void pointTouched(int playerId, PointState pointState){
-        //System.out.println("FUCKKKKKKK");
+
         PlayerState p = (playerId == 1) ? state.player1
                 : (playerId == 2) ? state.player2
                 : (playerId == 3) ? state.player3
@@ -140,7 +139,6 @@ public class ServerGameLogic {
         }
     }
     public synchronized void bombTouched(int playerId, BombState bombState){
-        //System.out.println("FUCKKKKKKK");
         PlayerState p = (playerId == 1) ? state.player1
                 : (playerId == 2) ? state.player2
                 : (playerId == 3) ? state.player3

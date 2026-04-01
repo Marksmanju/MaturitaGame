@@ -62,12 +62,7 @@ public class Game extends JFrame implements Runnable {
                 setKey(e.getKeyCode(), false);
             }
         });
-        /*addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseMoved(MouseEvent e) {
-                bimput.mouseX = e.getX();
-                bimput.mouseY = e.getY();
-            }
-        });*/
+
 
         new Thread(this).start();
     }
@@ -78,32 +73,6 @@ public class Game extends JFrame implements Runnable {
         if (key == KeyEvent.VK_A) left = pressed;
         if (key == KeyEvent.VK_D) right = pressed;
     }
-    /*
-    public void run() {
-        while (true) {
-            try {
-                PlayerInput input = new PlayerInput();
-                input.up = up;
-                input.down = down;
-                input.left = left;
-                input.right = right;
-                input.mouseX = bimput.mouseX;
-                input.mouseY = bimput.mouseY;
-
-                client.sendInput(input);
-
-                GameState state = client.receiveState();
-                graphics.updateState(state);
-                if (state.postGameTimer == 0){
-                    System.exit(0);
-                }
-                Thread.sleep(16);
-            } catch (Exception e) {
-                break;
-            }
-        }
-    }
-*/
     public void run() {
         // 1. START A DEDICATED RECEIVE THREAD
         // This thread handles incoming data from the server without blocking the UI
@@ -133,12 +102,10 @@ public class Game extends JFrame implements Runnable {
         while (true) {
             try {
                 PlayerInput input = new PlayerInput();
-                input.up = up; //
-                input.down = down; //
-                input.left = left; //
-                input.right = right; //
-                /*input.mouseX = bimput.mouseX; //
-                input.mouseY = bimput.mouseY;*/ //
+                input.up = up;
+                input.down = down;
+                input.left = left;
+                input.right = right;
 
                 // Send current input to the server
                 client.sendInput(input); //

@@ -18,7 +18,6 @@ public class GameClient {
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
 
-        // Handshake: Send the lobby name first so the server knows where to put us
         out.writeObject(lobbyName);
         out.flush();
 
